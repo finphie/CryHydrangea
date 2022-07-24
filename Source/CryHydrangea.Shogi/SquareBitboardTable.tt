@@ -1,0 +1,23 @@
+﻿<#@ template linePragmas="false" #>
+<#
+    const int FileCount = 9;
+    const int RankCount = 9;
+#>
+namespace CryHydrangea.Shogi;
+
+/// <content>
+/// 自動生成した<see cref="Square"/>と<see cref="Bitboard"/>の対応テーブルです。
+/// </content>
+partial struct SquareBitboardTable
+{
+#pragma warning disable SA1600
+<# for (var file = 0; file < FileCount; file++) { #>
+<# for (var rank = 0; rank < RankCount; rank++) { #>
+<# var square = (file * FileCount) + rank; #>
+    public readonly Bitboard Value<#= square #> = Bitboard.Create(
+    <#= (file <= 6) ? "0b" + Convert.ToString(1L << square, 2) : "0" #>,
+    <#= (file >= 7) ? "0b" + Convert.ToString(1L << (((file - 7) * FileCount) + rank), 2) : "0" #>);
+<# if (square != (FileCount * RankCount) - 1) Write("\r\n"); #>
+<# } #>
+<# } #>
+}
